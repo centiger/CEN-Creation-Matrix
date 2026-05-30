@@ -1,130 +1,127 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#1b130b" />
-<title>창조시대 Matrix</title>
-<link rel="manifest" href="manifest.webmanifest">
-<style>
-  :root{
-    --bg:#120d08; --paper:#f4dfae; --ink:#2b1a0c; --gold:#d6a84a;
-    --brown:#6d4324; --green:#2f6f4e; --blue:#245c83; --red:#8b3a28;
-    --vh: 100svh;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;min-height:100%;background:var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;overflow-x:hidden}
-  body{width:100%;}
-  .app{width:100%;min-height:100svh;background:linear-gradient(180deg,#181009 0%,#25180d 45%,#120d08 100%);overflow-x:hidden}
-  .topbar{position:sticky;top:0;z-index:30;background:rgba(18,13,8,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(214,168,74,.28);padding:10px 14px 9px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .brand{display:flex;flex-direction:column;line-height:1.15}.brand b{font-size:18px;color:#ffe7a3}.brand span{font-size:11px;color:#d6bf8a}.mini{border:1px solid rgba(214,168,74,.45);color:#ffe7a3;border-radius:999px;padding:7px 10px;font-size:12px;background:rgba(255,255,255,.05)}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#17110b" />
+  <title>창조시대 Matrix</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root{
+      --bg:#100c08;--paper:#21160d;--gold:#e8c46a;--line:#d6a94a;--text:#fff6df;--muted:#d8c8a6;
+      --card:rgba(32,22,12,.92);--stroke:rgba(232,196,106,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+    body{display:block;}
+    .app{width:100vw;max-width:100vw;min-height:100vh;overflow-x:hidden;background:radial-gradient(circle at top,#332411 0,#100c08 54%,#070504 100%);} 
+    header{position:sticky;top:0;z-index:50;width:100%;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:linear-gradient(180deg,rgba(16,12,8,.96),rgba(16,12,8,.72));backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,196,106,.2)}
+    .title{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    h1{margin:0;font-size:20px;letter-spacing:-.03em;color:var(--gold)}
+    .subtitle{margin-top:4px;font-size:12px;color:var(--muted)}
+    .home-btn{border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--text);border-radius:999px;padding:7px 10px;font-size:12px}
 
-  /* 핵심: 화면 자체가 세로 매트릭스. 가로판 없음. */
-  .matrix-wrap{width:100%;max-width:480px;margin:0 auto;padding:12px 10px 28px;overflow-x:hidden}
-  .matrix-map{position:relative;width:100%;aspect-ratio:9/28;min-height:1520px;border-radius:26px;overflow:hidden;border:1px solid rgba(255,231,163,.34);box-shadow:0 18px 42px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.08);background:#253b43;touch-action:pan-y pinch-zoom;}
-  @media (min-width:700px){.matrix-map{min-height:1800px}.matrix-wrap{max-width:520px}}
+    /* 핵심: 화면 자체가 세로형. 가로 캔버스 없음. */
+    .matrix-wrap{width:100%;max-width:480px;margin:0 auto;padding:12px 10px 26px;overflow-x:hidden;}
+    .matrix-stage{position:relative;width:100%;min-height:1780px;border-radius:28px;overflow:hidden;border:1px solid rgba(232,196,106,.28);box-shadow:0 20px 60px rgba(0,0,0,.45);background:#1a120b;}
 
-  .zone{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-  .zone::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.18),transparent 38%);opacity:.75}
-  .z1{top:0;height:15%;background:linear-gradient(180deg,#0a1028,#23496a 70%,#6bb2af)}
-  .z1 .stars{position:absolute;inset:0;background-image:radial-gradient(#fff 1px,transparent 1.5px);background-size:28px 28px;opacity:.42}
-  .z2{top:15%;height:21%;background:linear-gradient(180deg,#78b86f,#58a45e 48%,#2e7c55)}
-  .z2::after{content:"";position:absolute;left:-12%;right:-12%;bottom:-6%;height:45%;background:radial-gradient(ellipse at center,#216b8a 0 18%,transparent 19%),linear-gradient(115deg,transparent 0 42%,rgba(54,141,181,.62) 43% 49%,transparent 50%),linear-gradient(65deg,transparent 0 44%,rgba(54,141,181,.58) 45% 51%,transparent 52%);opacity:.75}
-  .z3{top:36%;height:18%;background:linear-gradient(180deg,#9d7c45,#6d4a2e 55%,#4a3023)}
-  .z4{top:54%;height:23%;background:linear-gradient(180deg,#344b5f,#1e3f58 45%,#51606a)}
-  .z4::after{content:"";position:absolute;left:5%;right:5%;bottom:13%;height:20%;background:repeating-linear-gradient(168deg,rgba(255,255,255,.22) 0 5px,transparent 5px 20px);opacity:.42;border-radius:50%}
-  .z5{top:77%;height:23%;background:linear-gradient(180deg,#b88b48,#8b5d31 42%,#4d2c1a)}
+    .scene{position:absolute;left:0;width:100%;padding:18px 16px;display:flex;align-items:center;justify-content:center;text-align:center;}
+    .scene::before{content:"";position:absolute;inset:0;opacity:.9;}
+    .scene-content{position:relative;z-index:2;width:100%;}
+    .scene h2{margin:0;font-size:22px;line-height:1.15;color:#fff3cf;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+    .scene p{margin:6px auto 0;max-width:290px;font-size:12px;line-height:1.45;color:#fff4d4cc}
 
-  .sun{position:absolute;top:4.5%;left:50%;width:90px;height:90px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#fff6b7 0 28%,#ffd667 29% 55%,rgba(255,214,103,.0) 70%);box-shadow:0 0 42px #ffd667}
-  .eden-tree{position:absolute;top:21%;left:50%;width:118px;height:145px;transform:translateX(-50%)}
-  .eden-tree:before{content:"";position:absolute;left:48px;top:58px;width:22px;height:86px;background:#6b3c1f;border-radius:15px}
-  .eden-tree:after{content:"";position:absolute;left:0;top:0;width:118px;height:92px;background:radial-gradient(circle at 35% 35%,#b8ef7d,#3f8b45 70%);border-radius:50%;box-shadow:0 0 28px rgba(184,239,125,.45)}
-  .fruit{position:absolute;top:25%;left:42%;font-size:38px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
-  .ark{position:absolute;top:64.2%;left:49%;transform:translateX(-50%);width:52%;height:76px;background:linear-gradient(180deg,#8a5b35,#4d2e1b);border:4px solid #2b1a0c;border-radius:7px 7px 12px 12px;box-shadow:0 12px 20px rgba(0,0,0,.38)}
-  .ark:before{content:"";position:absolute;left:10%;right:10%;top:-25px;height:28px;background:linear-gradient(180deg,#9a6b42,#5d3921);border:3px solid #2b1a0c;border-bottom:0;border-radius:5px 5px 0 0}
-  .ark:after{content:"";position:absolute;inset:17px 22px auto 22px;height:11px;background:repeating-linear-gradient(90deg,#2b1a0c 0 16px,transparent 16px 28px);opacity:.8}
-  .mount{position:absolute;top:71%;left:54%;width:62%;height:130px;transform:translateX(-50%);background:linear-gradient(135deg,#5f5b54,#2d2d2d);clip-path:polygon(0 100%,25% 48%,39% 70%,57% 28%,100% 100%);opacity:.92}
-  .babel{position:absolute;bottom:6.2%;left:50%;transform:translateX(-50%);width:58%;height:230px;background:repeating-linear-gradient(180deg,#c18a42 0 28px,#9b6734 28px 35px);clip-path:polygon(20% 100%,80% 100%,72% 78%,66% 78%,60% 56%,55% 56%,50% 34%,45% 34%,39% 56%,34% 56%,28% 78%,22% 78%);filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));opacity:.95}
+    .creation{top:0;height:300px;background:linear-gradient(180deg,#10213a 0%,#3b2b15 82%,#315233 100%)}
+    .creation::before{background:radial-gradient(circle at 50% 20%,#fff7b3 0 7%,transparent 18%),radial-gradient(circle at 20% 34%,rgba(255,255,255,.9) 0 1px,transparent 2px),radial-gradient(circle at 72% 38%,rgba(255,255,255,.75) 0 1px,transparent 2px),linear-gradient(180deg,rgba(255,255,255,.04),transparent)}
+    .eden{top:300px;height:310px;background:linear-gradient(180deg,#315233,#24513f 55%,#44361b)}
+    .eden::before{background:radial-gradient(circle at 50% 45%,rgba(146,220,119,.65) 0 16%,transparent 36%),linear-gradient(140deg,transparent 42%,rgba(88,180,216,.5) 43% 46%,transparent 47%),linear-gradient(40deg,transparent 45%,rgba(88,180,216,.45) 46% 49%,transparent 50%)}
+    .fall{top:610px;height:270px;background:linear-gradient(180deg,#44361b,#3b2118 60%,#281713)}
+    .fall::before{background:radial-gradient(circle at 54% 35%,rgba(210,59,47,.5) 0 8%,transparent 18%),linear-gradient(90deg,transparent 48%,rgba(255,221,136,.35) 49% 51%,transparent 52%)}
+    .sin{top:880px;height:240px;background:linear-gradient(180deg,#281713,#2d2119 45%,#1d1714)}
+    .sin::before{background:linear-gradient(120deg,transparent 0 45%,rgba(120,70,48,.45) 46% 55%,transparent 56%),radial-gradient(circle at 40% 45%,rgba(120,30,25,.5) 0 6%,transparent 13%)}
+    .flood{top:1120px;height:330px;background:linear-gradient(180deg,#1d2530,#263d4d 50%,#203947)}
+    .flood::before{background:linear-gradient(0deg,rgba(96,151,179,.72) 0 36%,transparent 37%),radial-gradient(circle at 68% 18%,rgba(255,255,255,.34) 0 16%,transparent 32%)}
+    .babel{top:1450px;height:330px;background:linear-gradient(180deg,#4c3b26,#7a6037 58%,#2b1b14)}
+    .babel::before{background:radial-gradient(circle at 50% 70%,rgba(255,211,120,.32) 0 28%,transparent 52%),linear-gradient(0deg,rgba(0,0,0,.25),transparent)}
 
-  .path{position:absolute;left:50%;top:10.5%;bottom:8%;width:4px;transform:translateX(-50%);background:linear-gradient(180deg,rgba(255,231,163,.15),rgba(255,231,163,.8),rgba(255,231,163,.15));border-radius:999px;box-shadow:0 0 18px rgba(255,231,163,.35)}
-  .path::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 28px,rgba(80,40,12,.55) 28px 38px);opacity:.55}
+    .path{position:absolute;left:50%;top:130px;width:4px;height:1450px;transform:translateX(-50%);background:linear-gradient(180deg,transparent,var(--line) 4%,var(--line) 94%,transparent);opacity:.78;z-index:7;}
+    .path::after{content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-top:14px solid var(--line)}
 
-  .title-card{position:absolute;top:1.1%;left:50%;transform:translateX(-50%);width:86%;padding:12px 10px;border-radius:18px;background:rgba(15,10,5,.58);border:1px solid rgba(255,231,163,.38);text-align:center;backdrop-filter:blur(8px)}
-  .title-card h1{margin:0;font-size:22px;color:#ffe7a3}.title-card p{margin:5px 0 0;font-size:12px;color:#f7dca5}
+    .event,.hub{position:absolute;z-index:20;transform:translate(-50%,-50%);}
+    .dot{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#fff2b6,#d8a945);color:#29190b;font-weight:900;border:3px solid rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+    .event-label{margin-top:5px;padding:5px 8px;border-radius:999px;background:rgba(20,12,6,.8);border:1px solid rgba(232,196,106,.32);font-size:12px;white-space:nowrap;box-shadow:0 5px 16px rgba(0,0,0,.25)}
+    .hub button{display:flex;align-items:center;gap:5px;border:1px solid rgba(232,196,106,.45);background:rgba(21,13,7,.82);color:#fff4d0;border-radius:999px;padding:8px 10px;font-weight:800;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 
-  .node{position:absolute;z-index:10;left:50%;transform:translate(-50%,-50%);width:min(74%,330px);display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:rgba(31,20,10,.82);border:1px solid rgba(255,231,163,.55);box-shadow:0 10px 22px rgba(0,0,0,.28);backdrop-filter:blur(8px);cursor:pointer;color:#fff;text-align:left}
-  .node .num{flex:0 0 34px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#ffe7a3;color:#2b1a0c;font-weight:900}.node .txt b{display:block;font-size:15px;color:#fff6c7}.node .txt span{display:block;font-size:11px;color:#e8cf9a;margin-top:2px;line-height:1.25}.node small{margin-left:auto;font-size:18px}
-  .n1{top:12.5%}.n2{top:31%}.n3{top:47%}.n4{top:66.5%}.n5{top:88%}
+    /* % 좌표: 세로형 매트릭스 기준 */
+    .e1{left:50%;top:8%}.e2{left:50%;top:32%}.e3{left:50%;top:57%}.e4{left:50%;top:73%}.e5{left:50%;top:91%}
+    .h1{left:22%;top:15%}.h2{left:76%;top:39%}.h3{left:24%;top:67%}.h4{left:74%;top:78%}.h5{left:75%;top:94%}
 
-  .hub{position:absolute;z-index:11;transform:translate(-50%,-50%);border:0;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:800;color:#201305;background:#ffe7a3;box-shadow:0 7px 18px rgba(0,0,0,.28);cursor:pointer;white-space:nowrap}.hub:active,.node:active{transform:translate(-50%,-50%) scale(.97)}
-  .h1{top:8.7%;left:23%}.h2{top:35%;left:74%;background:#ffd0bd}.h3{top:59%;left:25%;background:#d7e6ff}.h4{top:73.5%;left:76%;background:#d7ffd8}.h5{top:81.5%;left:25%;background:#ffe4a8}
-  .next-era{position:absolute;left:50%;bottom:1.6%;transform:translateX(-50%);width:82%;padding:12px;border-radius:18px;text-align:center;background:rgba(255,231,163,.16);border:1px solid rgba(255,231,163,.4);color:#ffe7a3;font-size:13px;z-index:12}.next-era b{display:block;font-size:16px;color:#fff6c7}
+    .ark{position:absolute;z-index:15;left:50%;top:75%;width:180px;height:62px;transform:translate(-50%,-50%);background:linear-gradient(180deg,#7b4a26,#4a2b17);border:3px solid #2a160d;border-radius:8px 8px 4px 4px;box-shadow:0 10px 20px rgba(0,0,0,.35)}
+    .ark::before{content:"";position:absolute;left:18px;right:18px;top:-28px;height:28px;background:linear-gradient(180deg,#8b552c,#553019);border:3px solid #2a160d;border-bottom:0;border-radius:5px 5px 0 0}
+    .ark::after{content:"";position:absolute;left:18px;right:18px;top:24px;height:3px;background:rgba(20,10,5,.7);box-shadow:0 16px 0 rgba(20,10,5,.55)}
+    .tower{position:absolute;z-index:15;left:50%;top:90%;width:150px;height:150px;transform:translate(-50%,-50%);background:conic-gradient(from 180deg,#9b6a37,#d0a45b,#7d4c26,#9b6a37);clip-path:polygon(48% 0,62% 22%,72% 42%,82% 64%,92% 100%,8% 100%,18% 64%,28% 42%,38% 22%);opacity:.9;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}
+    .next{position:absolute;z-index:25;left:50%;bottom:18px;transform:translateX(-50%);width:calc(100% - 32px);padding:12px;border-radius:18px;background:rgba(24,15,8,.88);border:1px solid rgba(232,196,106,.35);text-align:center;font-size:13px;color:#ffe7a6}
 
-  .hint{max-width:480px;margin:10px auto 20px;padding:0 16px;color:#cbb98e;font-size:12px;line-height:1.5;text-align:center}
+    .panel{position:fixed;left:50%;bottom:0;z-index:100;width:100%;max-width:480px;max-height:76vh;transform:translate(-50%,105%);transition:.28s ease;background:rgba(25,16,9,.98);border:1px solid rgba(232,196,106,.35);border-bottom:0;border-radius:24px 24px 0 0;box-shadow:0 -20px 60px rgba(0,0,0,.55);padding:18px 16px calc(18px + env(safe-area-inset-bottom));overflow:auto}
+    .panel.open{transform:translate(-50%,0)}
+    .panel h3{margin:0 0 8px;color:var(--gold);font-size:20px}
+    .panel p{margin:0 0 12px;color:#fff1d0;line-height:1.55;font-size:14px}
+    .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.chip{padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(232,196,106,.25);font-size:12px;color:#ffe9b0}.close{position:absolute;right:14px;top:14px;border:0;background:#3a2816;color:#fff;border-radius:50%;width:34px;height:34px;font-size:18px}.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.2s}.overlay.open{opacity:1;pointer-events:auto}
 
-  .modal{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;background:rgba(0,0,0,.55)}.modal.on{display:flex}.sheet{width:100%;max-width:520px;margin:0 auto;background:#fff7df;color:#2b1a0c;border-radius:24px 24px 0 0;max-height:82svh;overflow:auto;box-shadow:0 -12px 42px rgba(0,0,0,.45)}.sheet-head{position:sticky;top:0;background:#fff7df;border-bottom:1px solid #e4c988;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}.sheet-head h2{margin:0;font-size:19px}.close{border:0;border-radius:50%;width:34px;height:34px;background:#6d4324;color:#fff;font-size:20px}.sheet-body{padding:16px}.section{margin:0 0 16px;padding:14px;border-radius:16px;background:#f2dfb3;border:1px solid #e4c988}.section h3{margin:0 0 8px;font-size:15px;color:#6d4324}.section ul{margin:0;padding-left:18px}.section li{margin:5px 0;line-height:1.45}.pillrow{display:flex;gap:8px;flex-wrap:wrap}.pill{border-radius:999px;padding:7px 10px;background:#6d4324;color:#fff;font-size:12px}
-  .bottom-nav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(94%,430px);z-index:40;display:flex;gap:7px;padding:8px;border-radius:999px;background:rgba(18,13,8,.88);border:1px solid rgba(255,231,163,.28);backdrop-filter:blur(10px)}.bottom-nav button{flex:1;border:0;border-radius:999px;padding:9px 4px;font-size:11px;font-weight:800;color:#ffe7a3;background:rgba(255,255,255,.07)}
-</style>
+    @media (min-width:481px){.matrix-stage{min-height:1900px}.matrix-wrap{padding-top:18px}}
+    @media (max-width:360px){.matrix-stage{min-height:1680px}.dot{width:52px;height:52px}.hub button{font-size:11px;padding:7px 8px}.ark{width:156px}.scene h2{font-size:20px}}
+  </style>
 </head>
 <body>
-<div class="app">
-  <header class="topbar">
-    <div class="brand"><b>창조시대 Matrix</b><span>창세기 1~11장 · 허브 통합형</span></div>
-    <div class="mini">세로형</div>
-  </header>
+  <div class="app">
+    <header>
+      <div class="title"><h1>창조시대 Matrix</h1><button class="home-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">처음으로</button></div>
+      <div class="subtitle">창조 → 타락 → 죄의 확산 → 홍수 → 바벨탑 → 아브라함 소명</div>
+    </header>
 
-  <main class="matrix-wrap">
-    <section class="matrix-map" id="map" aria-label="창조시대 세로형 매트릭스">
-      <div class="zone z1"><div class="stars"></div></div><div class="zone z2"></div><div class="zone z3"></div><div class="zone z4"></div><div class="zone z5"></div>
-      <div class="sun"></div><div class="eden-tree"><span class="fruit">🍎</span></div><div class="path"></div><div class="ark"></div><div class="mount"></div><div class="babel"></div>
-      <div class="title-card"><h1>창조 → 바벨탑</h1><p>하나님이 창조하신 세계에서 죄와 심판, 언약과 열방 분산으로 이어지는 성경의 프롤로그</p></div>
+    <main class="matrix-wrap">
+      <section class="matrix-stage" aria-label="창조시대 세로형 매트릭스">
+        <div class="scene creation"><div class="scene-content"><h2>☀️ 창조</h2><p>하나님이 말씀으로 세계를 창조하시고 인간을 하나님의 형상으로 세우심</p></div></div>
+        <div class="scene eden"><div class="scene-content"><h2>🌳 에덴동산</h2><p>생명, 임재, 안식, 사명의 공간</p></div></div>
+        <div class="scene fall"><div class="scene-content"><h2>🍎 타락과 추방</h2><p>죄가 들어오고 에덴 밖으로 밀려남</p></div></div>
+        <div class="scene sin"><div class="scene-content"><h2>⚔️ 죄의 확산</h2><p>가인과 아벨, 인간 사회 안으로 번지는 죄</p></div></div>
+        <div class="scene flood"><div class="scene-content"><h2>🌧️ 홍수와 방주</h2><p>심판 속에서 보존되는 구원</p></div></div>
+        <div class="scene babel"><div class="scene-content"><h2>🗼 바벨탑</h2><p>흩어진 열방, 그리고 다음 시대의 문</p></div></div>
 
-      <button class="hub h1" data-hub="creation">🌟 창조허브</button>
-      <button class="hub h2" data-hub="fall">🍎 타락허브</button>
-      <button class="hub h3" data-hub="judgment">⚖️ 심판허브</button>
-      <button class="hub h4" data-hub="covenant">🌈 언약허브</button>
-      <button class="hub h5" data-hub="nations">🌍 열방허브</button>
+        <div class="path"></div>
+        <div class="ark" title="노아의 방주"></div>
+        <div class="tower" title="바벨탑"></div>
 
-      <button class="node n1" data-event="creation"><span class="num">1</span><span class="txt"><b>창조</b><span>빛 · 하늘 · 땅 · 생명 · 인간 창조</span></span><small>☀️</small></button>
-      <button class="node n2" data-event="fall"><span class="num">2</span><span class="txt"><b>타락</b><span>선악과 · 죄의 시작 · 에덴 추방</span></span><small>🍎</small></button>
-      <button class="node n3" data-event="cain"><span class="num">3</span><span class="txt"><b>가인과 아벨</b><span>첫 살인 · 죄의 확산 · 놋 땅</span></span><small>⚔️</small></button>
-      <button class="node n4" data-event="flood"><span class="num">4</span><span class="txt"><b>노아홍수</b><span>방주 · 심판 · 무지개 언약</span></span><small>📦</small></button>
-      <button class="node n5" data-event="babel"><span class="num">5</span><span class="txt"><b>바벨탑</b><span>시날평지 · 언어 혼잡 · 열방 분산</span></span><small>🗼</small></button>
+        <div class="event e1" onclick="openPanel('창조', '하나님이 천지를 창조하시고 인간을 하나님의 형상으로 지으신 사건입니다.', ['창세기 1–2장','하나님의 형상','안식','새창조'])"><div class="dot">1</div><div class="event-label">창조</div></div>
+        <div class="event e2" onclick="openPanel('타락', '선악과 사건으로 죄가 들어오고 인간은 에덴에서 추방됩니다.', ['창세기 3장','죄','추방','여자의 후손'])"><div class="dot">2</div><div class="event-label">타락</div></div>
+        <div class="event e3" onclick="openPanel('가인과 아벨', '첫 살인 사건을 통해 죄가 개인과 공동체 안으로 확산됩니다.', ['창세기 4장','질투','살인','죄의 확산'])"><div class="dot">3</div><div class="event-label">가인과 아벨</div></div>
+        <div class="event e4" onclick="openPanel('노아홍수', '하나님의 심판과 방주를 통한 보존, 무지개 언약이 함께 나타납니다.', ['창세기 6–9장','방주','심판','무지개 언약'])"><div class="dot">4</div><div class="event-label">노아홍수</div></div>
+        <div class="event e5" onclick="openPanel('바벨탑', '인간의 교만과 언어 혼잡, 열방 분산으로 족장시대의 배경이 마련됩니다.', ['창세기 11장','시날평지','언어 혼잡','열방 분산'])"><div class="dot">5</div><div class="event-label">바벨탑</div></div>
 
-      <div class="next-era"><b>다음 시대 예고</b>열방 분산 이후, 하나님은 아브라함을 부르셔서 언약의 역사를 시작하신다.</div>
-    </section>
-  </main>
-  <p class="hint">이 버전은 가로판이 아니라 세로형 매트릭스 자체입니다. 화면 폭에 맞춰 줄어들고, 아래로 스크롤하며 사건을 따라갑니다.</p>
-</div>
+        <div class="hub h1"><button onclick="openPanel('창조 허브', '창조, 하나님의 형상, 에덴, 안식을 묶어 성경 전체의 시작을 보여줍니다.', ['천지창조','하나님의 형상','에덴동산','안식','새창조'])">🌟 창조허브</button></div>
+        <div class="hub h2"><button onclick="openPanel('타락 허브', '불순종, 죄, 추방, 회복 약속을 연결합니다.', ['선악과','뱀의 유혹','에덴 추방','여자의 후손'])">🍎 타락허브</button></div>
+        <div class="hub h3"><button onclick="openPanel('심판 허브', '가인, 홍수, 바벨탑을 통해 죄에 대한 하나님의 공의를 보여줍니다.', ['가인','홍수','바벨탑','최후심판'])">⚖️ 심판허브</button></div>
+        <div class="hub h4"><button onclick="openPanel('언약 허브', '심판 속에서도 이어지는 하나님의 구원 약속을 정리합니다.', ['여자의 후손','가죽옷','무지개 언약','새언약'])">🌈 언약허브</button></div>
+        <div class="hub h5"><button onclick="openPanel('열방 허브', '바벨탑 이후 흩어진 열방과 아브라함 소명, 오순절 선교로 이어지는 흐름입니다.', ['열국표','바벨탑','아브라함 소명','오순절','세계선교'])">🌍 열방허브</button></div>
 
-<nav class="bottom-nav">
-  <button onclick="scrollToPct(0)">처음</button><button onclick="scrollToPct(.32)">타락</button><button onclick="scrollToPct(.58)">홍수</button><button onclick="scrollToPct(.84)">바벨</button>
-</nav>
+        <div class="next">⭐ 다음 시대 예고: 바벨탑 이후, 하나님은 아브라함을 부르셔서 언약의 역사를 시작하십니다.</div>
+      </section>
+    </main>
+  </div>
+  <div class="overlay" id="overlay" onclick="closePanel()"></div>
+  <aside class="panel" id="panel"><button class="close" onclick="closePanel()">×</button><h3 id="panelTitle"></h3><p id="panelText"></p><div class="chips" id="panelChips"></div></aside>
 
-<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="sheet"><div class="sheet-head"><h2 id="modalTitle">제목</h2><button class="close" onclick="closeModal()">×</button></div><div class="sheet-body" id="modalBody"></div></div></div>
-
-<script>
-const data={
- creation:{title:'창조',summary:'하나님이 말씀으로 천지를 창조하시고 인간을 하나님의 형상으로 지으신 사건입니다.',meaning:['성경 전체의 시작점','세계는 우연이 아니라 하나님의 창조 질서 안에 있음','인간은 하나님의 형상으로 지음받은 존재'],connect:['새창조','새예루살렘','하나님의 나라'],bible:'창세기 1~2장'},
- fall:{title:'타락',summary:'아담과 하와가 선악과를 먹음으로 죄가 세상에 들어오고 에덴에서 추방됩니다.',meaning:['죄와 죽음의 시작','하나님과 인간 관계의 단절','구원의 약속이 필요한 이유'],connect:['여자의 후손','십자가','속죄와 회복'],bible:'창세기 3장'},
- cain:{title:'가인과 아벨',summary:'인류 안에 들어온 죄가 형제 살인으로 확산되는 장면입니다.',meaning:['죄가 개인을 넘어 사회와 관계를 파괴함','하나님은 피 흘림과 폭력을 외면하지 않으심','놋 땅은 하나님을 떠난 삶의 상징'],connect:['죄의 확산','심판','회개'],bible:'창세기 4장'},
- flood:{title:'노아홍수',summary:'세상의 죄악이 가득할 때 하나님은 홍수로 심판하시고, 방주를 통해 노아 가족을 보존하십니다.',meaning:['심판 속의 구원','방주는 항해용 배가 아니라 구원의 상자에 가까움','무지개 언약은 보존의 약속'],connect:['방주와 구원','세례','새로운 시작'],bible:'창세기 6~9장'},
- babel:{title:'바벨탑',summary:'사람들이 자기 이름을 내고 흩어짐을 거부하자 하나님이 언어를 혼잡하게 하시고 열방으로 흩으십니다.',meaning:['인간 교만의 상징','열방 분산의 출발','아브라함 소명으로 이어지는 배경'],connect:['아브라함 소명','오순절','세계선교'],bible:'창세기 10~11장'},
- creationHub:{title:'창조 허브',summary:'창조, 하나님의 형상, 에덴동산, 안식의 의미를 묶어 보는 허브입니다.',meaning:['천지창조','하나님의 형상','에덴동산','안식일'],connect:['성막','성전','새창조'],bible:'창세기 1~2장'},
- fallHub:{title:'타락 허브',summary:'선악과, 유혹, 불순종, 추방을 통해 죄의 본질을 보는 허브입니다.',meaning:['선악과','뱀의 유혹','죄의 시작','에덴 추방'],connect:['십자가','속죄','회복'],bible:'창세기 3장'},
- judgmentHub:{title:'심판 허브',summary:'가인, 홍수, 바벨탑을 통해 죄가 심판으로 이어지는 흐름을 보는 허브입니다.',meaning:['가인','홍수','바벨탑','하나님의 공의'],connect:['출애굽 재앙','멸망과 포로','최후심판'],bible:'창세기 4~11장'},
- covenantHub:{title:'언약 허브',summary:'타락 이후에도 하나님이 구원의 약속을 남기시는 흐름을 보는 허브입니다.',meaning:['여자의 후손','가죽옷','노아 언약','무지개'],connect:['아브라함 언약','시내산 언약','새언약'],bible:'창세기 3장, 9장'},
- nationsHub:{title:'열방 허브',summary:'바벨탑과 열국표를 통해 열방 분산과 이후 선교의 배경을 보는 허브입니다.',meaning:['열국표','시날평지','언어 혼잡','민족 분산'],connect:['아브라함','오순절','열방 선교'],bible:'창세기 10~11장'}
-};
-const hubKey={creation:'creationHub',fall:'fallHub',judgment:'judgmentHub',covenant:'covenantHub',nations:'nationsHub'};
-function html(item){return `<div class="section"><h3>사건 요약</h3><p>${item.summary}</p></div><div class="section"><h3>핵심 의미</h3><ul>${item.meaning.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="section"><h3>연결탐험</h3><div class="pillrow">${item.connect.map(x=>`<span class="pill">${x}</span>`).join('')}</div></div><div class="section"><h3>관련 성경</h3><p>${item.bible}</p></div>`}
-function openItem(key){const item=data[key];document.getElementById('modalTitle').textContent=item.title;document.getElementById('modalBody').innerHTML=html(item);document.getElementById('modal').classList.add('on');history.pushState({modal:true},'')}
-function closeModal(){document.getElementById('modal').classList.remove('on')}
-document.querySelectorAll('[data-event]').forEach(b=>b.addEventListener('click',()=>openItem(b.dataset.event)));
-document.querySelectorAll('[data-hub]').forEach(b=>b.addEventListener('click',()=>openItem(hubKey[b.dataset.hub])));
-document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-window.addEventListener('popstate',()=>{if(document.getElementById('modal').classList.contains('on'))closeModal()});
-function scrollToPct(p){const map=document.getElementById('map');const y=map.getBoundingClientRect().top+window.scrollY+(map.offsetHeight*p)-90;window.scrollTo({top:y,behavior:'smooth'})}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
-</script>
-</body></html>
+  <script>
+    if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{});}
+    function openPanel(title,text,chips){
+      document.getElementById('panelTitle').textContent=title;
+      document.getElementById('panelText').textContent=text;
+      document.getElementById('panelChips').innerHTML=(chips||[]).map(c=>`<span class="chip">${c}</span>`).join('');
+      document.getElementById('panel').classList.add('open');
+      document.getElementById('overlay').classList.add('open');
+    }
+    function closePanel(){document.getElementById('panel').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+    window.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+  </script>
+</body>
+</html>
