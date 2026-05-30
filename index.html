@@ -2,114 +2,98 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#15120b" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <title>창조시대 Matrix</title>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#070b12" />
 <style>
-  :root{
-    --bg:#100f0b; --panel:#211b12; --panel2:#2d2417; --line:#d5ad61; --gold:#f0cc75;
-    --text:#fff5df; --muted:#d6c5a4; --green:#7fd38b; --red:#dc786e; --blue:#7db6ff;
-    --max:520px;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;overflow-x:hidden}
-  body{display:flex;justify-content:center}
-  #app{width:100%;max-width:var(--max);min-height:100vh;background:linear-gradient(180deg,#15120b 0%,#100f0b 70%);position:relative;overflow-x:hidden}
-  header{position:sticky;top:0;z-index:20;background:rgba(16,15,11,.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,204,117,.18);padding:12px 14px 10px}
-  .topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  h1{margin:0;font-size:20px;letter-spacing:-.04em;color:var(--gold)}
-  .chip{font-size:12px;color:#ffe5a4;border:1px solid rgba(240,204,117,.35);border-radius:999px;padding:5px 9px;background:rgba(240,204,117,.08);white-space:nowrap}
-  .sub{margin-top:5px;font-size:12px;color:var(--muted);line-height:1.35}
-  .hero{margin:14px 12px 8px;border:1px solid rgba(240,204,117,.28);border-radius:24px;min-height:310px;overflow:hidden;position:relative;background:#1c170f;box-shadow:0 22px 60px rgba(0,0,0,.35)}
-  .hero-art{position:absolute;inset:0;background:
-    radial-gradient(circle at 28% 8%,rgba(255,243,170,.95) 0 4%,rgba(255,221,99,.45) 5% 13%,transparent 26%),
-    radial-gradient(circle at 55% 27%,rgba(60,180,118,.65) 0 11%,rgba(40,126,78,.5) 12% 22%,transparent 34%),
-    radial-gradient(circle at 33% 48%,rgba(115,82,43,.85) 0 10%,rgba(84,52,31,.65) 11% 24%,transparent 35%),
-    radial-gradient(circle at 35% 70%,rgba(64,111,154,.75) 0 18%,rgba(24,52,80,.7) 19% 34%,transparent 48%),
-    radial-gradient(circle at 75% 84%,rgba(190,137,70,.9) 0 14%,rgba(111,69,39,.75) 15% 28%,transparent 43%),
-    linear-gradient(180deg,#172034 0%,#25361f 30%,#3a281d 55%,#162433 72%,#2b1b13 100%);
-    filter:saturate(1.08);
-  }
-  .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.48));pointer-events:none}
-  .hero-title{position:absolute;z-index:2;left:18px;right:18px;bottom:18px}
-  .hero-title strong{display:block;font-size:24px;letter-spacing:-.05em;color:#fff2c1;text-shadow:0 2px 10px rgba(0,0,0,.5)}
-  .hero-title span{display:block;margin-top:5px;font-size:13px;color:#f0dfbb;line-height:1.35}
-  .sun,.tree,.ark,.tower{position:absolute;z-index:1;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
-  .sun{left:16%;top:8%;font-size:46px}.tree{left:46%;top:24%;font-size:58px}.ark{left:23%;top:67%;font-size:46px}.tower{right:15%;bottom:16%;font-size:54px}
-  .section-title{padding:18px 18px 6px;color:#ffe6a6;font-size:15px;font-weight:800;letter-spacing:-.03em}
-  .matrix{position:relative;margin:0 12px 22px;padding:16px 12px 28px;border:1px solid rgba(240,204,117,.18);border-radius:26px;background:linear-gradient(180deg,rgba(55,42,24,.72),rgba(27,22,15,.92));overflow:hidden}
-  .matrix:before{content:"";position:absolute;top:40px;bottom:64px;left:50%;width:3px;transform:translateX(-50%);background:linear-gradient(180deg,rgba(240,204,117,.15),rgba(240,204,117,.75),rgba(240,204,117,.15));border-radius:999px}
-  .era{position:relative;display:grid;grid-template-columns:1fr 58px 1fr;align-items:center;min-height:140px;gap:8px}
-  .era:nth-child(even) .card{grid-column:1/2;text-align:right}.era:nth-child(even) .visual{grid-column:3/4}.era:nth-child(odd) .card{grid-column:3/4}.era:nth-child(odd) .visual{grid-column:1/2;text-align:right}
-  .node{grid-column:2/3;grid-row:1;justify-self:center;align-self:center;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#fff1be 0 30%,#d8a849 45%,#715022 100%);border:3px solid #ffe29b;color:#2b1c08;font-weight:900;z-index:3;box-shadow:0 0 0 6px rgba(240,204,117,.13),0 10px 30px rgba(0,0,0,.42)}
-  .card{z-index:2;border-radius:18px;padding:12px 12px;background:rgba(15,13,10,.68);border:1px solid rgba(255,226,155,.2);box-shadow:0 12px 30px rgba(0,0,0,.22)}
-  .card b{display:block;font-size:16px;color:#ffe3a0;letter-spacing:-.05em}.card small{display:block;margin-top:4px;color:var(--muted);font-size:11.5px;line-height:1.35}.visual{font-size:46px;z-index:2;opacity:.95}
-  .hubbar{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:0 12px 18px}
-  .hubbtn{border:1px solid rgba(255,226,155,.25);background:linear-gradient(180deg,#3a2b18,#20180f);color:#ffe8b0;border-radius:15px;padding:9px 4px;min-height:58px;font-weight:800;font-size:11px;letter-spacing:-.04em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 8px 20px rgba(0,0,0,.24)}
-  .hubbtn span{font-size:21px}.hubbtn:active{transform:scale(.97)}
-  .panel{margin:0 12px 18px;border-radius:22px;border:1px solid rgba(240,204,117,.2);background:rgba(30,24,16,.88);padding:16px;display:none}.panel.show{display:block}.panel h2{margin:0 0 8px;font-size:19px;color:#ffe29b}.panel p{margin:0;color:#e7d6b7;font-size:13px;line-height:1.55}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.tag{font-size:12px;color:#fff1ca;background:rgba(240,204,117,.11);border:1px solid rgba(240,204,117,.25);padding:6px 9px;border-radius:999px}
-  .connect{margin:0 12px 30px;border-radius:24px;padding:16px;background:linear-gradient(180deg,#1e2a23,#151813);border:1px solid rgba(127,211,139,.25)}
-  .connect h2{margin:0 0 10px;font-size:18px;color:#b8f2bd}.path{font-size:13px;line-height:1.75;color:#e4f6dc}.path b{color:#fff0a5}
-  .footer{padding:18px 18px 30px;color:#9e927e;font-size:11px;text-align:center}
-  button{font-family:inherit;cursor:pointer}
-  @media (min-width:700px){#app{border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)}}
-  @media (max-width:360px){.card{padding:10px 9px}.card b{font-size:14px}.card small{font-size:10.8px}.era{grid-template-columns:1fr 50px 1fr}.node{width:42px;height:42px}.hubbtn{font-size:10px}.visual{font-size:38px}}
+:root{
+  --bg:#070b12;--panel:rgba(8,13,23,.88);--line:rgba(255,214,128,.45);--gold:#f8d37b;--text:#fff7e6;--muted:#d9c8a9;
+  --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent} html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden} body{touch-action:pan-y;background:linear-gradient(180deg,#03060b,#0b101b 45%,#03060b)}
+.app{width:100%;max-width:520px;margin:0 auto;min-height:100dvh;position:relative;background:#050914;box-shadow:0 0 50px rgba(0,0,0,.75)}
+.topbar{position:sticky;top:0;z-index:30;padding:calc(8px + var(--safe-top)) 10px 8px;background:linear-gradient(180deg,rgba(3,6,11,.96),rgba(3,6,11,.72));backdrop-filter:blur(10px);border-bottom:1px solid rgba(248,211,123,.22);display:flex;align-items:center;gap:8px}
+.brand{flex:1;min-width:0}.brand b{display:block;font-size:16px;letter-spacing:-.02em}.brand span{font-size:11px;color:var(--muted)}
+.topbtn{border:1px solid rgba(248,211,123,.35);background:rgba(255,255,255,.06);color:var(--text);border-radius:999px;padding:7px 9px;font-size:12px;font-weight:700}
+.map-wrap{position:relative;width:100%;overflow:hidden;background:#050914}.map-img{display:block;width:100%;height:auto;user-select:none;pointer-events:none}.map-overlay{position:absolute;inset:0;z-index:4}.hotspot{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;color:white;padding:0;cursor:pointer}.dot{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.38),rgba(248,211,123,.18) 32%,rgba(16,22,36,.92) 72%);border:2px solid rgba(248,211,123,.82);box-shadow:0 0 0 4px rgba(0,0,0,.34),0 0 22px rgba(248,211,123,.42);font-size:23px;position:relative}.dot::after{content:attr(data-n);position:absolute;right:-9px;top:-10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#b98a2e;color:#fff;font-size:13px;font-weight:900;border:2px solid #f8d37b}.dot:active{transform:scale(.94)}
+.hub{min-width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1.5px solid rgba(255,255,255,.7);background:rgba(5,9,20,.75);backdrop-filter:blur(4px);box-shadow:0 0 16px rgba(0,0,0,.55);font-size:20px}.hub::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px dashed rgba(248,211,123,.3)}
+.pulse{animation:pulse 2.2s infinite}@keyframes pulse{0%,100%{filter:drop-shadow(0 0 0 rgba(248,211,123,0))}50%{filter:drop-shadow(0 0 13px rgba(248,211,123,.95))}}
+.quick{position:fixed;left:50%;bottom:calc(10px + var(--safe-bottom));transform:translateX(-50%);z-index:35;width:min(500px,calc(100% - 16px));display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:7px;background:rgba(3,6,11,.72);border:1px solid rgba(248,211,123,.24);border-radius:18px;backdrop-filter:blur(12px)}
+.quick button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#f7ead0;border-radius:13px;padding:8px 3px;font-size:11px;font-weight:800}.quick small{display:block;font-size:17px;line-height:1.1}.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);z-index:50;width:min(520px,100%);max-height:82dvh;background:linear-gradient(180deg,rgba(15,20,32,.98),rgba(5,8,14,.99));border:1px solid rgba(248,211,123,.32);border-bottom:0;border-radius:24px 24px 0 0;box-shadow:0 -20px 70px rgba(0,0,0,.75);padding:14px 16px calc(20px + var(--safe-bottom));transition:transform .25s ease;overflow:auto}.sheet.open{transform:translate(-50%,0)}.handle{width:42px;height:4px;border-radius:99px;background:rgba(255,255,255,.28);margin:0 auto 12px}.sheet h2{margin:0 0 4px;font-size:24px;letter-spacing:-.04em}.sheet .sub{color:var(--gold);font-weight:800;margin-bottom:12px}.sheet p{line-height:1.6;color:#f4e8d2;margin:8px 0}.chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.chip{border:1px solid rgba(248,211,123,.3);border-radius:999px;padding:6px 9px;font-size:12px;color:#f7e6bd;background:rgba(248,211,123,.07)}.links{display:grid;gap:8px;margin-top:12px}.linkcard{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);border-radius:14px;padding:10px 12px}.close{position:absolute;right:14px;top:14px;border:0;border-radius:50%;width:34px;height:34px;background:rgba(255,255,255,.09);color:#fff;font-size:20px}.dim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:45;display:none}.dim.show{display:block}.hint{position:absolute;left:50%;top:9.4%;transform:translateX(-50%);z-index:5;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.18);border-radius:999px;color:#fff0c8;font-size:11px;font-weight:800;padding:6px 10px;backdrop-filter:blur(5px);white-space:nowrap}
+.footer-space{height:74px}.toast{position:fixed;left:50%;top:calc(54px + var(--safe-top));transform:translateX(-50%);z-index:60;background:rgba(12,18,28,.92);border:1px solid rgba(248,211,123,.35);border-radius:999px;padding:8px 12px;color:#ffe8ac;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.legend{padding:14px 16px 90px;background:#050914}.legend h3{margin:6px 0 10px;font-size:18px}.legend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.legend-card{border:1px solid rgba(248,211,123,.18);background:rgba(255,255,255,.05);border-radius:14px;padding:10px}.legend-card b{display:block;color:#ffe0a0;margin-bottom:4px}.legend-card span{font-size:12px;color:#d9c8a9;line-height:1.45}
+@media (min-width:521px){.app{border-left:1px solid rgba(248,211,123,.15);border-right:1px solid rgba(248,211,123,.15)}.dot{width:62px;height:62px}.quick{bottom:16px}.sheet{bottom:0}}
+@media (max-width:380px){.dot{width:48px;height:48px;font-size:20px}.dot::after{width:21px;height:21px;font-size:12px}.topbtn{font-size:11px;padding:6px 7px}.quick button{font-size:10px}.quick small{font-size:15px}.sheet h2{font-size:22px}}
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <div class="topline"><h1>창조시대 Matrix</h1><div class="chip">창세기 1~11장</div></div>
-    <div class="sub">PNG 느낌은 상단 분위기로 살리고, 실제 탐험은 세로형 반응형 매트릭스로 구성했습니다.</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><b>창조시대 Matrix</b><span>창조에서 바벨탑, 그리고 아브라함 소명까지</span></div>
+    <button class="topbtn" onclick="openPanel('overview')">개요</button>
+    <button class="topbtn" onclick="scrollToTop()">처음</button>
   </header>
-
-  <section class="hero" aria-label="창조시대 대표 이미지">
-    <div class="hero-art"></div><div class="sun">☀️</div><div class="tree">🌳</div><div class="ark">📦</div><div class="tower">🗼</div>
-    <div class="hero-title"><strong>창조에서 바벨탑까지</strong><span>창조 · 타락 · 심판 · 언약 · 열방으로 이어지는 성경의 첫 흐름</span></div>
-  </section>
-
-  <div class="section-title">세로형 핵심사건 흐름</div>
-  <main class="matrix">
-    <section class="era"><div class="visual">🌌</div><div class="node">1</div><div class="card"><b>창조</b><small>하나님이 천지를 창조하시고 인간을 하나님의 형상으로 세우심</small></div></section>
-    <section class="era"><div class="visual">🍎</div><div class="node">2</div><div class="card"><b>타락</b><small>선악과 사건으로 죄가 들어오고 에덴에서 추방됨</small></div></section>
-    <section class="era"><div class="visual">⚔️</div><div class="node">3</div><div class="card"><b>가인과 아벨</b><small>첫 살인을 통해 죄가 인간 사회로 확산됨</small></div></section>
-    <section class="era"><div class="visual">🌧️</div><div class="node">4</div><div class="card"><b>노아홍수</b><small>심판 가운데 방주를 통한 구원과 무지개 언약이 주어짐</small></div></section>
-    <section class="era"><div class="visual">🗼</div><div class="node">5</div><div class="card"><b>바벨탑</b><small>인간의 교만, 언어 혼잡, 열방 분산으로 이어짐</small></div></section>
-    <section class="era"><div class="visual">⭐</div><div class="node">→</div><div class="card"><b>아브라함 소명</b><small>다음 시대인 족장시대로 넘어가는 연결 지점</small></div></section>
+  <main class="map-wrap" id="map">
+    <img class="map-img" src="assets/creation-bg.png" alt="창조시대 세로형 매트릭스 배경" />
+    <div class="hint">도트와 허브를 터치하세요</div>
+    <div class="map-overlay">
+      <button class="hotspot" style="left:15%;top:8.8%" onclick="openPanel('creation')"><span class="dot pulse" data-n="1">✦</span></button>
+      <button class="hotspot" style="left:15%;top:24.6%" onclick="openPanel('fall')"><span class="dot" data-n="2">🌳</span></button>
+      <button class="hotspot" style="left:15%;top:40.2%" onclick="openPanel('cain')"><span class="dot" data-n="3">⚔️</span></button>
+      <button class="hotspot" style="left:15%;top:56.3%" onclick="openPanel('flood')"><span class="dot" data-n="4">🌧️</span></button>
+      <button class="hotspot" style="left:15%;top:72.1%" onclick="openPanel('babel')"><span class="dot" data-n="5">🧱</span></button>
+      <button class="hotspot" style="left:15%;top:88.6%" onclick="openPanel('abraham')"><span class="dot pulse" data-n="6">★</span></button>
+      <button class="hotspot" style="left:82%;top:17.5%" onclick="openPanel('hub-creation')"><span class="hub">✨</span></button>
+      <button class="hotspot" style="left:82%;top:30.5%" onclick="openPanel('hub-fall')"><span class="hub">🍎</span></button>
+      <button class="hotspot" style="left:82%;top:56.3%" onclick="openPanel('hub-judgment')"><span class="hub">⚖️</span></button>
+      <button class="hotspot" style="left:82%;top:64.4%" onclick="openPanel('hub-covenant')"><span class="hub">🌈</span></button>
+      <button class="hotspot" style="left:82%;top:77.8%" onclick="openPanel('hub-nations')"><span class="hub">🌍</span></button>
+    </div>
   </main>
-
-  <div class="section-title">통합 허브</div>
-  <nav class="hubbar">
-    <button class="hubbtn" data-hub="creation"><span>🌟</span>창조</button>
-    <button class="hubbtn" data-hub="fall"><span>🍎</span>타락</button>
-    <button class="hubbtn" data-hub="judgment"><span>⚖️</span>심판</button>
-    <button class="hubbtn" data-hub="covenant"><span>🌈</span>언약</button>
-    <button class="hubbtn" data-hub="nations"><span>🌍</span>열방</button>
-  </nav>
-
-  <section id="hubPanel" class="panel show">
-    <h2>🌟 창조 허브</h2>
-    <p>천지창조, 하나님의 형상, 에덴동산, 안식으로 이어지는 시작의 허브입니다.</p>
-    <div class="tags"><span class="tag">천지창조</span><span class="tag">하나님의 형상</span><span class="tag">에덴</span><span class="tag">안식</span></div>
+  <section class="legend">
+    <h3>허브 바로가기</h3>
+    <div class="legend-grid">
+      <button class="legend-card" onclick="openPanel('hub-creation')"><b>✨ 창조 허브</b><span>창조, 형상, 안식, 새창조</span></button>
+      <button class="legend-card" onclick="openPanel('hub-fall')"><b>🍎 타락 허브</b><span>죄의 시작과 에덴 추방</span></button>
+      <button class="legend-card" onclick="openPanel('hub-judgment')"><b>⚖️ 심판 허브</b><span>가인, 홍수, 바벨탑</span></button>
+      <button class="legend-card" onclick="openPanel('hub-covenant')"><b>🌈 언약 허브</b><span>여자의 후손, 방주, 무지개</span></button>
+      <button class="legend-card" onclick="openPanel('hub-nations')"><b>🌍 열방 허브</b><span>바벨탑, 언어 혼잡, 열방 분산</span></button>
+      <button class="legend-card" onclick="openPanel('explore')"><b>🔗 연결탐험</b><span>성막, 십자가, 오순절, 새예루살렘</span></button>
+    </div>
   </section>
-
-  <section class="connect">
-    <h2>연결탐험</h2>
-    <div class="path"><b>창조</b> → 새창조 → 새예루살렘<br><b>에덴동산</b> → 성막 → 성전 → 하나님의 임재<br><b>노아방주</b> → 구원 → 세례 → 새 시작<br><b>바벨탑</b> → 오순절 → 세계선교 → 열방의 회복</div>
-  </section>
-  <div class="footer">CEN Bible · Creation Age Matrix Prototype</div>
 </div>
+<nav class="quick">
+  <button onclick="openPanel('hub-creation')"><small>✨</small>창조</button>
+  <button onclick="openPanel('hub-fall')"><small>🍎</small>타락</button>
+  <button onclick="openPanel('hub-judgment')"><small>⚖️</small>심판</button>
+  <button onclick="openPanel('hub-covenant')"><small>🌈</small>언약</button>
+  <button onclick="openPanel('hub-nations')"><small>🌍</small>열방</button>
+</nav>
+<div class="dim" id="dim" onclick="closePanel()"></div>
+<section class="sheet" id="sheet" aria-live="polite"><button class="close" onclick="closePanel()">×</button><div class="handle"></div><div id="content"></div></section>
+<div class="toast" id="toast">선택됨</div>
 <script>
-const hubs={
- creation:{t:'🌟 창조 허브',p:'천지창조, 하나님의 형상, 에덴동산, 안식으로 이어지는 시작의 허브입니다.',tags:['천지창조','하나님의 형상','에덴','안식']},
- fall:{t:'🍎 타락 허브',p:'선악과, 유혹, 범죄, 추방을 통해 죄의 시작과 회복의 필요를 보여줍니다.',tags:['선악과','유혹','범죄','추방']},
- judgment:{t:'⚖️ 심판 허브',p:'가인과 아벨, 홍수, 바벨탑을 통해 죄의 확산과 하나님의 공의를 봅니다.',tags:['가인','홍수','바벨탑','공의']},
- covenant:{t:'🌈 언약 허브',p:'여자의 후손, 가죽옷, 무지개 언약을 통해 은혜의 씨앗을 연결합니다.',tags:['여자의 후손','가죽옷','무지개 언약','은혜']},
- nations:{t:'🌍 열방 허브',p:'열국표, 바벨탑, 민족 분산을 거쳐 아브라함 소명과 세계선교로 이어집니다.',tags:['열국표','언어 혼잡','민족 분산','아브라함']}
+const DATA={
+overview:{title:'창조시대 개요',sub:'창세기 1:1 ~ 11:9',body:['창조시대는 성경 전체 이야기의 출발점입니다. 흐름은 창조 → 타락 → 죄의 확산 → 홍수 심판 → 바벨탑 → 아브라함 소명으로 이어집니다.','이 매트릭스는 지도라기보다 세로형 구속사 스토리보드입니다. 아래로 내려가며 사건을 따라가고, 각 도트와 허브를 터치해 상세 내용을 봅니다.'],chips:['창조','타락','심판','언약','열방'],links:['창조에서 새창조로 이어지는 큰 흐름','바벨탑 이후 아브라함 소명으로 연결']},
+creation:{title:'창조',sub:'창 1:1',body:['하나님이 천지를 창조하시고 인간을 하나님의 형상으로 지으신 사건입니다.','성경 전체의 출발점이며, 마지막 새하늘과 새땅으로 이어지는 큰 주제의 시작입니다.'],chips:['천지창조','하나님의 형상','안식일'],links:['창조 → 새창조 → 새예루살렘','에덴 → 성막 → 성전 → 하나님의 임재']},
+fall:{title:'타락',sub:'창 3:1-6',body:['아담과 하와가 하나님의 명령을 어기고 선악과를 먹은 사건입니다.','죄가 인간 세계에 들어오고, 에덴에서의 추방과 관계의 깨어짐이 시작됩니다.'],chips:['선악과','유혹','추방','죄의 시작'],links:['타락 → 십자가 → 회복','에덴 추방 → 하나님의 임재 회복']},
+cain:{title:'가인과 아벨',sub:'창 4:1-8',body:['가인이 아벨을 시기하여 죽인 사건입니다.','타락 이후 죄가 개인과 가족, 사회로 확산되는 모습을 보여줍니다.'],chips:['첫 살인','시기','죄의 확산'],links:['가인 → 죄의 확산 → 홍수 심판','피 흘림 → 속죄의 필요']},
+flood:{title:'노아홍수',sub:'창 6:5-8:22',body:['세상의 악함이 가득하자 하나님이 홍수로 심판하신 사건입니다.','방주는 항해용 선박이라기보다 하나님이 준비하신 거대한 구원의 상자에 가깝습니다.'],chips:['폭우','심판의 물','방주','새로운 시작'],links:['방주 → 구원 → 세례','무지개 → 언약 → 은혜']},
+babel:{title:'바벨탑',sub:'창 11:1-9',body:['사람들이 하늘에 닿는 이름을 내고자 탑을 쌓은 사건입니다.','뾰족한 탑보다는 메소포타미아식 계단형 지구라트에 가까운 이미지가 적절합니다.'],chips:['지구라트','교만','언어 혼잡','열방 분산'],links:['바벨탑 → 오순절 → 열방 선교','흩어짐 → 아브라함 소명']},
+abraham:{title:'아브라함 소명',sub:'창 12:1-3',body:['바벨탑 이후 흩어진 열방 가운데 하나님이 한 사람 아브라함을 부르십니다.','창조시대의 끝이자 족장시대로 넘어가는 연결문입니다.'],chips:['다음 시대','언약','복의 통로'],links:['아브라함 → 이스라엘 → 메시아','열방 분산 → 열방의 복']},
+'hub-creation':{title:'창조 허브',sub:'창조 · 형상 · 안식 · 새창조',body:['하나님이 세상을 질서 있게 창조하시고, 인간에게 하나님의 형상과 사명을 주신 흐름을 탐험합니다.'],chips:['빛','에덴','형상','안식'],links:['창조 → 안식일','에덴동산 → 새예루살렘','생명나무 → 생명수 강']},
+'hub-fall':{title:'타락 허브',sub:'선악과 · 불순종 · 추방',body:['죄가 어떻게 시작되고 인간과 하나님, 인간과 인간, 인간과 창조세계의 관계가 어떻게 무너지는지 보여줍니다.'],chips:['선악과','뱀','가죽옷','추방'],links:['가죽옷 → 속죄','여자의 후손 → 메시아 약속']},
+'hub-judgment':{title:'심판 허브',sub:'가인 · 홍수 · 바벨',body:['죄가 확산될 때 하나님의 공의가 어떻게 드러나는지 보여주는 허브입니다.'],chips:['첫 살인','홍수','언어 혼잡'],links:['홍수 심판 → 새 시작','바벨 심판 → 열방 분산']},
+'hub-covenant':{title:'언약 허브',sub:'여자의 후손 · 방주 · 무지개',body:['심판 속에서도 하나님이 구원의 약속을 끊지 않으시는 흐름을 보여줍니다.'],chips:['여자의 후손','방주','무지개','은혜'],links:['무지개 언약 → 아브라함 언약','방주 → 구원 → 세례']},
+'hub-nations':{title:'열방 허브',sub:'바벨탑 · 언어 혼잡 · 열방 분산',body:['인간의 교만으로 흩어진 열방이 결국 아브라함, 오순절, 세계선교로 다시 연결되는 흐름을 보여줍니다.'],chips:['열국표','시날평지','언어 혼잡','세계선교'],links:['바벨탑 → 오순절','아브라함 → 땅의 모든 족속','열방 → 새하늘과 새땅']},
+explore:{title:'연결탐험',sub:'창조시대에서 성경 전체로',body:['창조시대의 사건들은 이후 성경 전체의 씨앗이 됩니다. 각 사건은 후대의 언약, 성막, 십자가, 오순절, 새예루살렘으로 이어집니다.'],chips:['새창조','성막','십자가','오순절','새예루살렘'],links:['창조 → 새창조 → 새예루살렘','에덴 → 성막 → 성전 → 하나님의 임재','노아방주 → 구원 → 세례','바벨탑 → 오순절 → 열방 선교']}
 };
-const panel=document.getElementById('hubPanel');
-document.querySelectorAll('.hubbtn').forEach(btn=>btn.addEventListener('click',()=>{const h=hubs[btn.dataset.hub];panel.innerHTML=`<h2>${h.t}</h2><p>${h.p}</p><div class="tags">${h.tags.map(x=>`<span class="tag">${x}</span>`).join('')}</div>`;panel.classList.add('show');panel.scrollIntoView({behavior:'smooth',block:'nearest'});}));
+const sheet=document.getElementById('sheet'), dim=document.getElementById('dim'), content=document.getElementById('content'), toast=document.getElementById('toast');
+function openPanel(key){const d=DATA[key]||DATA.overview;content.innerHTML=`<h2>${d.title}</h2><div class="sub">${d.sub}</div>${d.body.map(p=>`<p>${p}</p>`).join('')}<div class="chips">${d.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div><div class="links">${d.links.map(l=>`<div class="linkcard">🔗 ${l}</div>`).join('')}</div>`;sheet.classList.add('open');dim.classList.add('show');showToast(d.title)}
+function closePanel(){sheet.classList.remove('open');dim.classList.remove('show')}
+function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(window.__to);window.__to=setTimeout(()=>toast.classList.remove('show'),900)}
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 </script>
 </body>

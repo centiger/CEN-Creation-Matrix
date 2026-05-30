@@ -1,1 +1,12 @@
-{"name":"창조시대 Matrix","short_name":"창조Matrix","start_url":"./index.html","display":"standalone","background_color":"#100f0b","theme_color":"#15120b","lang":"ko","icons":[]}
+{
+  "name": "창조시대 Matrix",
+  "short_name": "창조Matrix",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#111827",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"assets/creation-bg.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
