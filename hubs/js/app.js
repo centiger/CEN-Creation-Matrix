@@ -2,7 +2,7 @@ let DATA=null, current=null;
 const $=id=>document.getElementById(id);
 function qs(){return new URLSearchParams(location.search)}
 async function init(){
-  const res=await fetch('./data/hubs.json?v=babel-hub-1'); DATA=await res.json();
+  const res=await fetch('./data/hubs.json?v=abraham-hub-1'); DATA=await res.json();
   const slug=qs().get('hub')||DATA.defaultHub||'creation'; render(slug);
 }
 function find(slug){return DATA.hubs.find(h=>h.slug===slug)||DATA.hubs[0]}
@@ -20,7 +20,9 @@ function render(slug){
   $('references').innerHTML=(h.references||[]).map(x=>`<span class="chip">${x}</span>`).join('');
   const n=h.next?find(h.next):null;
   const btn=$('nextBtn');
-  if(n){btn.style.display='block';btn.textContent=`다음: ${n.title} →`;btn.onclick=()=>go(n.slug)}else{btn.style.display='none'}
+  if(n){btn.style.display='block';btn.textContent=`다음: ${n.title} →`;btn.onclick=()=>go(n.slug)}
+  else if(h.nextUrl){btn.style.display='block';btn.textContent=(h.nextLabel||'다음 시대로 이동')+' →';btn.onclick=()=>{location.href=h.nextUrl}}
+  else{btn.style.display='none'}
   history.replaceState(null,'',`?hub=${h.slug}`);
 }
 function renderPending(h){
