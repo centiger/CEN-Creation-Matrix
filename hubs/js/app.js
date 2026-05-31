@@ -2,7 +2,7 @@ let DATA=null, current=null;
 const $=id=>document.getElementById(id);
 function qs(){return new URLSearchParams(location.search)}
 async function init(){
-  const res=await fetch('./data/hubs.json?v=creation-hub-1'); DATA=await res.json();
+  const res=await fetch('./data/hubs.json?v=fall-hub-1'); DATA=await res.json();
   const slug=qs().get('hub')||DATA.defaultHub||'creation'; render(slug);
 }
 function find(slug){return DATA.hubs.find(h=>h.slug===slug)||DATA.hubs[0]}
